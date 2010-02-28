@@ -10,7 +10,7 @@ class Player implements KeyListener
 {
     boolean fixed = false;
     
-    final int VPPS = 600;
+    final int VPPS = 500;
     final int HPPS = 300;
         
     // double friction = 0.4;
@@ -63,6 +63,11 @@ class Player implements KeyListener
         
         world.y += y_speed * time_delta;
         
+        if (world.y > 0)
+        {
+            on_ground = false;
+        }
+        
         if (world.y() < 0)
         {
             world.y = 0;
@@ -70,7 +75,6 @@ class Player implements KeyListener
             on_ground = true;
         }
     }
-    
     
 	int x()
 	{
