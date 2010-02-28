@@ -4,6 +4,8 @@ import java.awt.event.*;
 import java.awt.Graphics2D;
 import java.awt.Color;
 
+// Key Codes: http://livedocs.adobe.com/flash/9.0/main/wwhelp/wwhimpl/common/html/wwhelp.htm?context=LiveDocs_Parts&file=00001136.html
+
 class Player implements KeyListener
 {
     boolean fixed = false;
