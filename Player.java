@@ -19,9 +19,11 @@ class Player implements KeyListener
         
     // double friction = 0.4;
     float x, y;
+    int max_height = 0;
     int width = 48;
-    int height = 48;
+    int height = 40;
     float y_speed = 0;
+    int y_initial;
     // TODO: Might not need y
 
     boolean key_up = false;
@@ -41,6 +43,8 @@ class Player implements KeyListener
 	    this.world = world;
 	    this.x = x;
 	    this.y = y;
+	    
+	    y_initial = y;
 	    
 	    try
         {
@@ -90,15 +94,21 @@ class Player implements KeyListener
         
         y += y_speed * time_delta;
         
-        if (y > 300 + height)
+        if (y > y_initial)
         {
             on_ground = false;
         }
-        else if (y < 300 + height)
+        else if (y < y_initial)
         {
             y = 300 + height;
             y_speed = 0;
             on_ground = true;
+        }
+        
+        if (y() > max_height)
+        {
+            max_height = y();
+            world.hud.score = (max_height - 300 - height) / 50;    
         }
     }
     

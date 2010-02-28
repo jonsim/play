@@ -21,6 +21,7 @@ class World extends JPanel
 	int gravity = -15;
 	
 	Player player;
+	Hud hud;
 	
 	int cloud_height;
 	int launcher_height;
@@ -32,17 +33,18 @@ class World extends JPanel
 	    
 	    // (500 - 48) / 2 = 226
 	    // 300 + 48 = 348
-	    player = new Player(this, 226, 348);
+	    player = new Player(this, 226, 340);
+        hud = new Hud(this, 20, 30);
 	    
 	    setPreferredSize(new Dimension(this.width, this.height));
 	    
 	    background.add(new Background(this, 0, 1200, 500, 1200));
 	    
-	    cloud_height = height * 2;
-        spawnClouds(500, cloud_height);
+	    cloud_height = 500;
+        spawnClouds(cloud_height, cloud_height + height);
         
-        launcher_height = height * 2;
-        spawnLaunchers(400, launcher_height);
+        launcher_height = 400;
+        spawnLaunchers(launcher_height, launcher_height + height);
 	}
 	
 	// Borked
@@ -61,17 +63,21 @@ class World extends JPanel
 	
 	void update(float time_delta)
 	{	    
+	    System.out.println(items.size() + " items " + background.size() + " background");
+	    
 	    if ((cloud_height - player.y) < 600)
 	    {
 	        System.out.println("Updating clouds");
-	        spawnClouds(cloud_height, cloud_height + (height * 2));    
+	        spawnClouds(cloud_height, cloud_height + height);    
 	    }
 	    
 	    if ((launcher_height - player.y) < 600)
 	    {
 	        System.out.println("Updating launchers");
-	        spawnLaunchers(launcher_height, launcher_height + (height * 2));    
+	        spawnLaunchers(launcher_height, launcher_height + height);    
 	    }
+	    
+	    player.update(time_delta);
 	    
 	    Item item;
 	    Iterator background_iterator = background.iterator();
@@ -80,6 +86,10 @@ class World extends JPanel
 	    {
 	        item = (Item) background_iterator.next();
 	        item.update(time_delta);
+	        
+	        // Purge
+	        if (!(item instanceof Background) && (player.y - item.y) > 600)
+	            background_iterator.remove();
 	    }
 	    
 	    Iterator items_iterator = items.iterator();
@@ -88,9 +98,12 @@ class World extends JPanel
 	    {
 	        item = (Item) items_iterator.next();
 	        item.update(time_delta);
+	        
+            // Purge
+	        if (item.dead || (player.y - item.y) > 600)
+	            items_iterator.remove();
 	    }
 	    
-	    player.update(time_delta);
 	    repaint();
     }
 
@@ -114,11 +127,15 @@ class World extends JPanel
 	    {
 	        item = (Item) o;
 	        
-	        if (!item.dead)
-	            item.draw(canvas);
+	        try
+	        {
+	            item.draw(canvas);    
+	        }
+	        catch (NullPointerException e) {}
 	    }
 	    
 	    player.draw(canvas);
+	    hud.draw(canvas);
     }
 
 	int abs_y()
@@ -129,7 +146,7 @@ class World extends JPanel
 	void spawnLaunchers(int from, int to)
 	{	    
 	    int gap = 200;
-	    int n = 4;
+	    int n = 5;
 	    
 	    Date date = new Date();
 	    Random random = new Random(date.getTime());

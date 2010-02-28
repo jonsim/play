@@ -15,7 +15,7 @@ class Background extends Item
 	    
 	    try
         {
-            background = ImageIO.read(new File("images/background.png"));
+            background = ImageIO.read(new File("images/background.jpg"));
         }
         catch (IOException e)
         {
