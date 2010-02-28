@@ -14,7 +14,7 @@ class Launcher extends Item
     void draw(Graphics2D g)
     {
         g.setColor(new Color(255, 0, 0));
-        g.fillRect(x(), y() + world.y(), width, height);
+        g.fillRect(x(), world.abs_y() - y(), width, height);
     }
     
     void update (float time_delta)
@@ -42,8 +42,8 @@ class Launcher extends Item
     {
         Player p = world.player;
         
-        int t = p.y() - world.y();
-        int b = (p.y() + p.height) - world.y();
+        int t = p.y();
+        int b = p.y() + p.height;
         int l = p.x();
         int r = p.x() + p.width;
         

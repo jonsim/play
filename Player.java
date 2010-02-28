@@ -19,8 +19,8 @@ class Player implements KeyListener
         
     // double friction = 0.4;
     float x, y;
-    int width = 40;
-    int height = 34;
+    int width = 48;
+    int height = 48;
     float y_speed = 0;
     // TODO: Might not need y
 
@@ -33,6 +33,8 @@ class Player implements KeyListener
     
     BufferedImage penguin_left;
     BufferedImage penguin_right;
+    BufferedImage penguin_up;
+    BufferedImage penguin_down;
     
     Player (World world, int x, int y)
 	{
@@ -44,22 +46,25 @@ class Player implements KeyListener
         {
             penguin_left = ImageIO.read(new File("images/player/penguin_left.png"));
             penguin_right = ImageIO.read(new File("images/player/penguin_right.png"));
+            penguin_up = ImageIO.read(new File("images/player/penguin_up.png"));
+            penguin_down = ImageIO.read(new File("images/player/penguin_down.png"));
         }
         catch (IOException e)
         {
-            System.err.println("Error reading image!");
+            System.err.println("Error reading images!");
         }
 	}
 
 	void draw(Graphics2D g)
     {        
-        if (key_right) {
-            g.drawImage(penguin_right, x(), y(), null);
-        }
+        if (key_right)
+            g.drawImage(penguin_right, x(), 300 - height, null);
+        else if (key_left)
+            g.drawImage(penguin_left,  x(), 300 - height, null);
+        else if (y_speed > 0)
+            g.drawImage(penguin_up,  x(), 300 - height, null);
         else
-        {
-            g.drawImage(penguin_left, x(), y(), null);
-        }
+            g.drawImage(penguin_down,  x(), 300 - height, null);
     }
     
     void update (float time_delta)
@@ -69,12 +74,12 @@ class Player implements KeyListener
         
         if (x < 0)
             x = 0;
-        else if (x > 460)
-            x = 460;
+        else if (x > 500 - width)
+            x = 500 - width;
         
         if (key_left  && x > 0)
             x -= HPPS * time_delta;
-        if (key_right && x < 460)
+        if (key_right && x < 500 - width)
             x += HPPS * time_delta;
             
         if (key_up && on_ground)
@@ -83,16 +88,15 @@ class Player implements KeyListener
             on_ground = false;
         }
         
-        world.y += y_speed * time_delta;
+        y += y_speed * time_delta;
         
-        if (world.y > 0)
+        if (y > 300 + height)
         {
             on_ground = false;
         }
-        
-        if (world.y() < 0)
+        else if (y < 300 + height)
         {
-            world.y = 0;
+            y = 300 + height;
             y_speed = 0;
             on_ground = true;
         }

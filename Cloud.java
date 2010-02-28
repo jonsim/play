@@ -25,7 +25,7 @@ class Cloud extends Item
 	    
 	    if (clouds.size() == 0)
 	    {
-	        for (int i = 0; i < 10; i++)	        
+	        for (int i = 0; i < 10; i++)
 	        {
     	        try
     	        {
@@ -45,6 +45,6 @@ class Cloud extends Item
 	
 	void draw(Graphics2D g)
     {
-        g.drawImage(clouds.get(cloud), x(), y() + world.y(), null);
+        g.drawImage(clouds.get(cloud), x(), world.abs_y() - y(), null);
     }
 }

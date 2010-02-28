@@ -27,6 +27,6 @@ class Background extends Item
     {
         g.setColor(new Color(74, 139, 238));
         g.fillRect(0, 0, world.width, world.height);
-        g.drawImage(background, 0, -600 + world.y(), null);
+        g.drawImage(background, 0, world.abs_y() - y(), null);
     }
 }

@@ -13,8 +13,8 @@ class World extends JPanel
 	ArrayList<Item> background = new ArrayList<Item>();
 	ArrayList<Item> items = new ArrayList<Item>();
 	
-	float x = 0;
-	float y = 0;
+	float abs_x = 0;
+	float abs_y = 0;
 	
 	int width;
 	int height;
@@ -28,11 +28,13 @@ class World extends JPanel
 	    this.width = width;
 	    this.height = height;
 	    
-	    player = new Player(this, 230, 266);
+	    // (500 - 48) / 2 = 226
+	    // 300 + 48 = 348
+	    player = new Player(this, 226, 348);
 	    
 	    setPreferredSize(new Dimension(this.width, this.height));
 	    
-	    background.add(new Background(this, 0, 0, this.width, this.height));
+	    background.add(new Background(this, 0, 1200, 500, 1200));
 	    
 	    spawnClouds();
 	    spawnLaunchers();
@@ -78,7 +80,10 @@ class World extends JPanel
     public void paintComponent(Graphics g)
     {   
         super.paintComponent(g);
-    
+        
+        //abs_x = x;
+        abs_y = height + (player.y() - (300 + player.height));
+
         Graphics2D canvas = (Graphics2D) g;
         
         Item item;
@@ -104,14 +109,14 @@ class World extends JPanel
 	    player.draw(canvas);
     }
 
-    int x()
+    int abs_x()
 	{
-	    return Math.round(x);
+	    return Math.round(abs_x);
 	}
 
-	int y()
+	int abs_y()
 	{
-	    return Math.round(y);
+	    return Math.round(abs_y);
 	}
 	
 	void spawnLaunchers()
@@ -122,12 +127,14 @@ class World extends JPanel
 	    Date date = new Date();
 	    Random random = new Random(date.getTime());
 	    
-	    for (int i = 0; i > (-900 + gap); i -= gap)
+	    // 300 + 100 = 400
+	    for (int i = 400; i < (1200 - gap); i += gap)
 	    {    
 	        for (int j = 0; j < n; j++)
 	        {
+	            // 15 = width of launcher
 	            int x = random.nextInt(width - 15);
-	            int y = random.nextInt(gap) + i;
+	            int y = i + random.nextInt(gap);
 	            
 	            items.add(new Launcher(this, x, y, 15, 15));
 	        }
@@ -141,10 +148,10 @@ class World extends JPanel
 	    Date date = new Date();
 	    Random random = new Random(date.getTime());
 	    
-	    for (int i = -310; i > (-900 + gap); i -= gap)
+	    for (int i = 500; i > (1200 - gap); i += gap)
 	    {    
-            int x = random.nextInt(width - 15);
-            int y = random.nextInt(gap) + i;
+            int x = random.nextInt(width + 140) - 139; // Check this
+            int y = i + random.nextInt(gap);
             
             background.add(new Cloud(this, x, y, 140, 100));
 	    }

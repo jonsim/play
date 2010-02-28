@@ -30,7 +30,7 @@ class Item
 	void draw(Graphics2D g)
     {
         g.setColor(new Color(0, 0, 0)); // Black
-        g.fillRect(x(), y() + world.y(), width, height);
+        g.fillRect(x(), world.abs_y() - y(), width, height);
     }
 	
 	void update(float time_delta)
@@ -43,7 +43,7 @@ class Item
             y += y_speed * time_delta;
 
             // TODO change this
-            if (y > (300 - height))
+            if (y > (300 + height))
                 dead = true;
         }
 	}
