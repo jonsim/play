@@ -13,7 +13,7 @@ class Launcher extends Item
     
     void draw(Graphics2D g)
     {
-        g.setColor(new Color(255, 255, 0)); // Vermillion
+        g.setColor(new Color(255, 0, 0));
         g.fillRect(x(), y() + world.y(), width, height);
     }
     

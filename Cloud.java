@@ -45,6 +45,6 @@ class Cloud extends Item
 	
 	void draw(Graphics2D g)
     {
-        g.drawImage(clouds.get(cloud), 0, y() + world.y(), null);
+        g.drawImage(clouds.get(cloud), x(), y() + world.y(), null);
     }
 }

@@ -17,6 +17,8 @@ class Play implements Runnable
     {
         JFrame w = new JFrame();
         w.setDefaultCloseOperation(w.EXIT_ON_CLOSE);
+        w.setTitle("Penguin");
+        w.setResizable(false);
         
         //Player player = new Player();        
         //w.addKeyListener(player);

@@ -10,8 +10,8 @@ class Background extends Item
     BufferedImage background;
     
     Background (World world, int x, int y, int width, int height)
-	{
-	    super(world, x, y, width, height);
+    {
+        super(world, x, y, width, height);
 	    
 	    try
         {
@@ -21,12 +21,12 @@ class Background extends Item
         {
             System.err.println("Error reading image!");
         }
-	}
+    }
 	
 	void draw(Graphics2D g)
     {
         g.setColor(new Color(74, 139, 238));
-        g.fillRect(x(), y(), width, height);
-        g.drawImage(background, 0, -600 + y() + world.y(), null);
+        g.fillRect(0, 0, world.width, world.height);
+        g.drawImage(background, 0, -600 + world.y(), null);
     }
 }

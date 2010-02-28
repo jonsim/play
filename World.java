@@ -10,8 +10,8 @@ import java.util.Random;
 
 class World extends JPanel
 {
+	ArrayList<Item> background = new ArrayList<Item>();
 	ArrayList<Item> items = new ArrayList<Item>();
-	ArrayList<Item> scenery = new ArrayList<Item>();
 	
 	float x = 0;
 	float y = 0;
@@ -28,11 +28,11 @@ class World extends JPanel
 	    this.width = width;
 	    this.height = height;
 	    
-	    player = new Player(this, 230, 260);
+	    player = new Player(this, 230, 266);
 	    
 	    setPreferredSize(new Dimension(this.width, this.height));
 	    
-	    scenery.add(new Background(this, 0, 0, 500, 600));
+	    background.add(new Background(this, 0, 0, this.width, this.height));
 	    
 	    spawnClouds();
 	    spawnLaunchers();
@@ -55,11 +55,11 @@ class World extends JPanel
 	void update(float time_delta)
 	{
 	    Item item;
-	    Iterator scenery_iterator = scenery.iterator();
+	    Iterator background_iterator = background.iterator();
 	    
-	    while (scenery_iterator.hasNext())
+	    while (background_iterator.hasNext())
 	    {
-	        item = (Item) scenery_iterator.next();
+	        item = (Item) background_iterator.next();
 	        item.update(time_delta);
 	    }
 	    
@@ -83,11 +83,11 @@ class World extends JPanel
         
         Item item;
         
-        Iterator scenery_iterator = scenery.iterator();
+        Iterator background_iterator = background.iterator();
 	    
-	    while (scenery_iterator.hasNext())
+	    while (background_iterator.hasNext())
 	    {
-	        item = (Item) scenery_iterator.next();
+	        item = (Item) background_iterator.next();
 	        item.draw(canvas);
 	    }
         
@@ -146,7 +146,7 @@ class World extends JPanel
             int x = random.nextInt(width - 15);
             int y = random.nextInt(gap) + i;
             
-            scenery.add(new Cloud(this, x, y, 210, 150));
+            background.add(new Cloud(this, x, y, 140, 100));
 	    }
 	}
 }

@@ -4,6 +4,10 @@ import java.awt.event.*;
 import java.awt.Graphics2D;
 import java.awt.Color;
 
+import java.awt.image.BufferedImage;
+import javax.imageio.ImageIO;
+import java.io.*;
+
 // Key Codes: http://livedocs.adobe.com/flash/9.0/main/wwhelp/wwhimpl/common/html/wwhelp.htm?context=LiveDocs_Parts&file=00001136.html
 
 class Player implements KeyListener
@@ -16,7 +20,7 @@ class Player implements KeyListener
     // double friction = 0.4;
     float x, y;
     int width = 40;
-    int height = 40;
+    int height = 34;
     float y_speed = 0;
     // TODO: Might not need y
 
@@ -27,17 +31,35 @@ class Player implements KeyListener
     
     World world;
     
+    BufferedImage penguin_left;
+    BufferedImage penguin_right;
+    
     Player (World world, int x, int y)
 	{
 	    this.world = world;
 	    this.x = x;
 	    this.y = y;
+	    
+	    try
+        {
+            penguin_left = ImageIO.read(new File("images/player/penguin_left.png"));
+            penguin_right = ImageIO.read(new File("images/player/penguin_right.png"));
+        }
+        catch (IOException e)
+        {
+            System.err.println("Error reading image!");
+        }
 	}
 
 	void draw(Graphics2D g)
-    {
-        g.setColor(new Color(255, 0, 255)); // Pink
-        g.fillRect(x(), y(), 40, 40);
+    {        
+        if (key_right) {
+            g.drawImage(penguin_right, x(), y(), null);
+        }
+        else
+        {
+            g.drawImage(penguin_left, x(), y(), null);
+        }
     }
     
     void update (float time_delta)
