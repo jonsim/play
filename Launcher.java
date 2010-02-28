@@ -19,16 +19,7 @@ class Launcher extends Item
     
     void update (float time_delta)
     {
-        if (!fixed)
-        {
-            yspeed -= world.gravity * 0.5;
-            
-            y += yspeed * time_delta;
-
-            // TODO change this
-            if (y > (300 - height))
-                dead = true;
-        }
+        super.update(time_delta);
         
         if (dying)
         {
@@ -41,7 +32,7 @@ class Launcher extends Item
         }
         else if (collision())
         {
-            world.player.yspeed = world.player.VPPS;
+            world.player.y_speed = world.player.VPPS;
             dying = true;
             fixed = false;
         }
@@ -50,18 +41,25 @@ class Launcher extends Item
     boolean collision()
     {
         Player p = world.player;
+        
         int t = p.y() - world.y();
         int b = (p.y() + p.height) - world.y();
         int l = p.x();
         int r = p.x() + p.width;
         
-        if (inShape(x(),         y(),          t, b, l, r)
-        ||  inShape(x() + width, y(),          t, b, l, r)
-        ||  inShape(x(),         y() + height, t, b, l, r)
-        ||  inShape(x() + width, y() + height, t, b, l, r))
+        if (inShape(x(), y(), t, b, l, r))
             return true;
-        else
-            return false;
+        
+        if (inShape(x() + width, y(), t, b, l, r))
+            return true;
+            
+        if (inShape(x(), y() + height, t, b, l, r))
+            return true;
+            
+        if (inShape(x() + width, y() + height, t, b, l, r))
+            return true;
+            
+        return false;
     }
 
     boolean inShape (int x, int y, int top, int bottom, int left, int right)

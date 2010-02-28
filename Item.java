@@ -4,11 +4,6 @@ import java.awt.Color;
 class Item
 {
 	World world;
-
-	boolean dead = false;
-	boolean fixed = true;
-	
-	float yspeed = 0;
 	
 	// Position
     float x;
@@ -17,8 +12,11 @@ class Item
     int height;
 	
 	// Speed
-	private float x_speed = 0;
-	private float y_speed = 0;
+	float x_speed = 0;
+	float y_speed = 0;
+	
+	boolean dead = false;
+	boolean fixed = true;
 	
 	Item (World world, int x, int y, int width, int height)
 	{
@@ -29,12 +27,6 @@ class Item
 	    this.y = y;
 	}
 	
-	// For debugging purposes only
-	void print()
-	{
-	    System.out.println("x:" + x() + " y:" + y() + " width:" + width + " height:" + height);
-	}
-	
 	void draw(Graphics2D g)
     {
         g.setColor(new Color(0, 0, 0)); // Black
@@ -43,7 +35,17 @@ class Item
 	
 	void update(float time_delta)
 	{
-	    // something goes here
+	    // Gravity
+	    if (!fixed)
+        {
+            y_speed -= world.gravity * 0.5;
+            
+            y += y_speed * time_delta;
+
+            // TODO change this
+            if (y > (300 - height))
+                dead = true;
+        }
 	}
 	
 	int x()
@@ -54,5 +56,11 @@ class Item
 	int y()
 	{
 	    return Math.round(y);
+	}
+	
+	// For debugging purposes only
+	void print()
+	{
+	    System.out.println("x:" + x() + " y:" + y() + " width:" + width + " height:" + height);
 	}
 }
