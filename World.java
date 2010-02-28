@@ -5,16 +5,13 @@ import java.awt.Graphics;
 import java.awt.Graphics2D;
 import java.awt.Dimension;
 
-import java.awt.image.BufferedImage;
-import javax.imageio.ImageIO;
-import java.io.*;
 import java.util.Date;
-
 import java.util.Random;
 
 class World extends JPanel
 {
 	ArrayList<Item> items = new ArrayList<Item>();
+	ArrayList<Item> scenery = new ArrayList<Item>();
 	
 	float x = 0;
 	float y = 0;
@@ -23,8 +20,6 @@ class World extends JPanel
 	int height;
 	
 	int gravity = -15;
-	
-	BufferedImage background;
 	
 	Player player;
 	
@@ -37,21 +32,13 @@ class World extends JPanel
 	    
 	    setPreferredSize(new Dimension(this.width, this.height));
 	    
-	    spawnLaunchers();
+	    scenery.add(new Background(this, 0, 0, 500, 600));
 	    
-        try
-        {
-            background = ImageIO.read(new File("images/background.gif"));
-        } catch (IOException e) {
-            System.err.println("Error reading image!");
-        }
+	    spawnClouds();
+	    spawnLaunchers();
 	}
 	
-	void add(Item item)
-	{
-	    items.add(item);
-	}
-	
+	// Borked
 	void remove(Item item)
 	{
 	    for (int i = 0; i < items.size(); i++)
@@ -68,6 +55,14 @@ class World extends JPanel
 	void update(float time_delta)
 	{
 	    Item item;
+	    Iterator scenery_iterator = scenery.iterator();
+	    
+	    while (scenery_iterator.hasNext())
+	    {
+	        item = (Item) scenery_iterator.next();
+	        item.update(time_delta);
+	    }
+	    
 	    Iterator items_iterator = items.iterator();
 	    
 	    while (items_iterator.hasNext())
@@ -86,23 +81,24 @@ class World extends JPanel
     
         Graphics2D canvas = (Graphics2D) g;
         
-        canvas.drawImage(background, 0, -600 + y(), null);
-        
         Item item;
+        
+        Iterator scenery_iterator = scenery.iterator();
+	    
+	    while (scenery_iterator.hasNext())
+	    {
+	        item = (Item) scenery_iterator.next();
+	        item.draw(canvas);
+	    }
+        
         Iterator items_iterator = items.iterator();
 	    
 	    while (items_iterator.hasNext())
 	    {	        
 	        item = (Item) items_iterator.next();
 	        
-	        if (item.dead)
-	        {
-	            //remove(item);
-	        }
-	        else
-	        {
-	            item.draw(canvas);
-	        }   
+	        if (!item.dead)
+	            item.draw(canvas); 
 	    }
 	    
 	    player.draw(canvas);
@@ -121,22 +117,36 @@ class World extends JPanel
 	void spawnLaunchers()
 	{	    
 	    int gap = 200;
-	    int n = 1000;
+	    int n = 4;
 	    
 	    Date date = new Date();
 	    Random random = new Random(date.getTime());
 	    
 	    for (int i = 0; i > (-900 + gap); i -= gap)
 	    {    
-	        System.out.println("----- (" + i + ") -> (" + (i+gap) + ") -----");
 	        for (int j = 0; j < n; j++)
 	        {
 	            int x = random.nextInt(width - 15);
 	            int y = random.nextInt(gap) + i;
 	            
-	            add(new Launcher(this, x, y, 15, 15));
-	            System.out.println("Launcher: x=" + x + " y=" + y);
+	            items.add(new Launcher(this, x, y, 15, 15));
 	        }
+	    }
+	}
+	
+	void spawnClouds()
+	{
+	    int gap = 200;
+	    
+	    Date date = new Date();
+	    Random random = new Random(date.getTime());
+	    
+	    for (int i = -310; i > (-900 + gap); i -= gap)
+	    {    
+            int x = random.nextInt(width - 15);
+            int y = random.nextInt(gap) + i;
+            
+            scenery.add(new Cloud(this, x, y, 210, 150));
 	    }
 	}
 }
