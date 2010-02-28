@@ -119,14 +119,14 @@ class World extends JPanel
 	}
 	
 	void spawnLaunchers()
-	{
+	{	    
 	    int gap = 200;
-	    int n = 4;
+	    int n = 1000;
 	    
 	    Date date = new Date();
 	    Random random = new Random(date.getTime());
 	    
-	    for (int i = -50; i > -900; i -= gap)
+	    for (int i = 0; i > (-900 + gap); i -= gap)
 	    {    
 	        System.out.println("----- (" + i + ") -> (" + (i+gap) + ") -----");
 	        for (int j = 0; j < n; j++)
@@ -138,7 +138,5 @@ class World extends JPanel
 	            System.out.println("Launcher: x=" + x + " y=" + y);
 	        }
 	    }
-	    
-
 	}
 }
