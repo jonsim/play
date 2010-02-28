@@ -41,7 +41,7 @@ class World extends JPanel
 	    
         try
         {
-            background = ImageIO.read(new File("background.gif"));
+            background = ImageIO.read(new File("images/background.gif"));
         } catch (IOException e) {
             System.err.println("Error reading image!");
         }
