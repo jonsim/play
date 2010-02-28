@@ -13,7 +13,6 @@ class World extends JPanel
 	ArrayList<Item> background = new ArrayList<Item>();
 	ArrayList<Item> items = new ArrayList<Item>();
 	
-	float abs_x = 0;
 	float abs_y = 0;
 	
 	int width;
@@ -22,6 +21,9 @@ class World extends JPanel
 	int gravity = -15;
 	
 	Player player;
+	
+	int cloud_height;
+	int launcher_height;
 	
 	World(int width, int height)
 	{
@@ -36,8 +38,11 @@ class World extends JPanel
 	    
 	    background.add(new Background(this, 0, 1200, 500, 1200));
 	    
-	    spawnClouds();
-	    spawnLaunchers();
+	    cloud_height = height * 2;
+        spawnClouds(500, cloud_height);
+        
+        launcher_height = height * 2;
+        spawnLaunchers(400, launcher_height);
 	}
 	
 	// Borked
@@ -55,7 +60,19 @@ class World extends JPanel
 	}
 	
 	void update(float time_delta)
-	{
+	{	    
+	    if ((cloud_height - player.y) < 600)
+	    {
+	        System.out.println("Updating clouds");
+	        spawnClouds(cloud_height, cloud_height + (height * 2));    
+	    }
+	    
+	    if ((launcher_height - player.y) < 600)
+	    {
+	        System.out.println("Updating launchers");
+	        spawnLaunchers(launcher_height, launcher_height + (height * 2));    
+	    }
+	    
 	    Item item;
 	    Iterator background_iterator = background.iterator();
 	    
@@ -81,45 +98,35 @@ class World extends JPanel
     {   
         super.paintComponent(g);
         
-        //abs_x = x;
         abs_y = height + (player.y() - (300 + player.height));
 
         Graphics2D canvas = (Graphics2D) g;
         
         Item item;
-        
-        Iterator background_iterator = background.iterator();
 	    
-	    while (background_iterator.hasNext())
+	    for (Object o : background.toArray())
 	    {
-	        item = (Item) background_iterator.next();
+	        item = (Item) o;
 	        item.draw(canvas);
 	    }
-        
-        Iterator items_iterator = items.iterator();
 	    
-	    while (items_iterator.hasNext())
-	    {	        
-	        item = (Item) items_iterator.next();
+	    for (Object o : items.toArray())
+	    {
+	        item = (Item) o;
 	        
 	        if (!item.dead)
-	            item.draw(canvas); 
+	            item.draw(canvas);
 	    }
 	    
 	    player.draw(canvas);
     }
-
-    int abs_x()
-	{
-	    return Math.round(abs_x);
-	}
 
 	int abs_y()
 	{
 	    return Math.round(abs_y);
 	}
 	
-	void spawnLaunchers()
+	void spawnLaunchers(int from, int to)
 	{	    
 	    int gap = 200;
 	    int n = 4;
@@ -127,33 +134,39 @@ class World extends JPanel
 	    Date date = new Date();
 	    Random random = new Random(date.getTime());
 	    
-	    // 300 + 100 = 400
-	    for (int i = 400; i < (1200 - gap); i += gap)
+	    int i;
+	    for (i = from + 15; i < (to - gap); i += gap)
 	    {    
 	        for (int j = 0; j < n; j++)
 	        {
 	            // 15 = width of launcher
-	            int x = random.nextInt(width - 15);
+	            int x = random.nextInt(width - 30);
 	            int y = i + random.nextInt(gap);
 	            
-	            items.add(new Launcher(this, x, y, 15, 15));
+	            items.add(new Launcher(this, x, y, 30, 15));
 	        }
 	    }
+	    
+	    launcher_height = i;
 	}
 	
-	void spawnClouds()
+	void spawnClouds(int from, int to)
 	{
 	    int gap = 200;
 	    
 	    Date date = new Date();
 	    Random random = new Random(date.getTime());
 	    
-	    for (int i = 500; i > (1200 - gap); i += gap)
+	    int y = 0;
+	    
+	    for (int i = from + 100; i < (to - gap); i = y + gap)
 	    {    
-            int x = random.nextInt(width + 140) - 139; // Check this
-            int y = i + random.nextInt(gap);
-            
+            int x = -130 + random.nextInt(width + 120); // -130 to 490
+            y = i + random.nextInt(gap);
+
             background.add(new Cloud(this, x, y, 140, 100));
 	    }
+	    
+	    cloud_height = y;
 	}
 }

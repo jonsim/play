@@ -1,20 +1,46 @@
 import java.awt.Color;
 import java.awt.Graphics2D;
 
+import java.awt.image.BufferedImage;
+import javax.imageio.ImageIO;
+import java.io.*;
+
 class Launcher extends Item
 {        
+	static BufferedImage fish;
+	static BufferedImage fish_dead;
+	
 	float life = 1;
 	boolean dying = false;
 	
 	Launcher (World world, int x, int y, int width, int height)
 	{
 	    super(world, x, y, width, height);
+	    
+	    if (fish == null)
+	    {
+	        try
+	        {
+                fish = ImageIO.read(new File("images/launchers/fish.png"));
+                fish_dead = ImageIO.read(new File("images/launchers/fish_dead.png"));
+            }
+            catch (IOException e)
+            {
+                System.err.println("Error reading image!");
+            }
+	    }
 	}
     
     void draw(Graphics2D g)
     {
-        g.setColor(new Color(255, 0, 0));
-        g.fillRect(x(), world.abs_y() - y(), width, height);
+        if (dying)
+        {
+            g.drawImage(fish_dead, x(), world.abs_y() - y(), null);
+        }
+        else
+        {
+            g.drawImage(fish, x(), world.abs_y() - y(), null);
+        }
     }
     
     void update (float time_delta)

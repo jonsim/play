@@ -38,12 +38,12 @@ class Item
 	    // Gravity
 	    if (!fixed)
         {
-            y_speed -= world.gravity * 0.5;
+            y_speed += world.gravity * 0.5f;
             
             y += y_speed * time_delta;
 
             // TODO change this
-            if (y > (300 + height))
+            if (y <= (300 + height))
                 dead = true;
         }
 	}
