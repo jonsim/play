@@ -8,6 +8,7 @@ import java.io.*;
 class Launcher extends Item
 {        
 	static BufferedImage fish;
+	static BufferedImage fish2;
 	static BufferedImage fish_dead;
 	
 	float life = 1;
@@ -23,6 +24,7 @@ class Launcher extends Item
 	        {
                 fish = ImageIO.read(new File("images/launchers/fish.png"));
                 fish_dead = ImageIO.read(new File("images/launchers/fish_dead.png"));
+                fish2 = ImageIO.read(new File("images/launchers/fish2.png"));
             }
             catch (IOException e)
             {
@@ -39,11 +41,14 @@ class Launcher extends Item
         }
         else
         {
-            g.drawImage(fish, x(), world.abs_y() - y(), null);
+            if (this instanceof MegaLauncher)
+                g.drawImage(fish2, x(), world.abs_y() - y(), null);
+            else
+                g.drawImage(fish, x(), world.abs_y() - y(), null);
         }
     }
     
-    void update (float time_delta)
+    void update (double time_delta)
     {
         super.update(time_delta);
         
@@ -58,10 +63,17 @@ class Launcher extends Item
         }
         else if (collision())
         {
-            world.player.y_speed = world.player.VPPS;
+            launch_player();
+                
             dying = true;
             fixed = false;
         }
+    }
+    
+    void launch_player()
+    {
+        if (world.player.VPPS > world.player.y_speed)
+            world.player.y_speed = world.player.VPPS; 
     }
     
     boolean collision()

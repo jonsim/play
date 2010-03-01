@@ -18,7 +18,7 @@ class World extends JPanel
 	int width;
 	int height;
 	
-	int gravity = -15;
+	int gravity = -1000;
 	
 	Player player;
 	Hud hud;
@@ -36,18 +36,18 @@ class World extends JPanel
 	    
 	    setPreferredSize(new Dimension(this.width, this.height));
 	    
-	    background.add(new Background(this, 0, 1200, 500, 1200));
+	    background.add(new Background(this, 0, 2400, 500, 2400));
 	    
 	    cloud_height = 500;
         spawnClouds(cloud_height, cloud_height + height);
         
-        launcher_height = 400;
+        launcher_height = 415;
         spawnLaunchers(launcher_height, launcher_height + height);
 	}
 	
-	void update(float time_delta)
+	void update(double time_delta)
 	{	    
-	    System.out.println(items.size() + " items " + background.size() + " background");
+	    //System.out.println(items.size() + " items " + background.size() + " background");
 	    
 	    if ((cloud_height - player.y) < 600)
 	        spawnClouds(cloud_height, cloud_height + height);    
@@ -122,26 +122,43 @@ class World extends JPanel
 	}
 	
 	void spawnLaunchers(int from, int to)
-	{	    
-	    int gap = 200;
+	{	    	    
+	    int minimum_gap = 50;
+	    int maximum_gap = 195; // 235 - 40
+	    
+	    int height_from_start = player.y() - player.y_initial;
+	    int max_difficulty_height = 50000;
+	    
+	    float difficulty = (float) height_from_start / max_difficulty_height;
+	    
+	    int gap = Math.round((difficulty * (maximum_gap - minimum_gap)) + minimum_gap);
+	    
 	    int n = 5;
 	    
 	    Date date = new Date();
 	    Random random = new Random(date.getTime());
 	    
 	    int i;
-	    for (i = from + 15; i < (to - gap); i += gap)
-	    {    
+	    int max_y = 0;
+	    
+	    for (i = from; i < (to - gap); i = max_y + gap)
+	    {    	        
 	        for (int j = 0; j < n; j++)
 	        {
 	            int x = random.nextInt(width - 30);
 	            int y = i + random.nextInt(gap);
 	            
-	            items.add(new Launcher(this, x, y, 30, 15));
+	            if (y > max_y)
+	                max_y = y;
+	            
+	            if (random.nextInt(40) == 0)
+	                items.add(new MegaLauncher(this, x, y, 30, 15));
+	            else
+	                items.add(new Launcher(this, x, y, 30, 15));
 	        }
 	    }
 	    
-	    launcher_height = i;
+	    launcher_height = max_y + gap;
 	}
 	
 	void spawnClouds(int from, int to)

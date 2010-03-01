@@ -1,10 +1,11 @@
 import javax.swing.JFrame;
 import javax.swing.SwingUtilities;
 
+import java.util.Date;
+
 class Play implements Runnable
 {        
     World world = new World(500, 600);
-    final float FPS = 50;
     
     public static void main(String[] args)
     {
@@ -30,12 +31,37 @@ class Play implements Runnable
 
     void animate()
     {
-        // http://gafferongames.com/game-physics/fix-your-timestep/
+        long delta = 20, begin, end; // milliseconds
+        Date date;
+        
         try {
             while (true)
-            {
-                world.update(1 / FPS);
-                Thread.sleep(1000 / (int) FPS);
+            {                
+                if (delta != 20)
+                    System.out.println((1 / ((double) delta / 1000)) + " fps");
+                
+                date = new Date();
+                begin = date.getTime();
+                
+                world.update((double) delta / 1000);
+                
+                date = new Date();
+                end = date.getTime();
+                
+                if ((end - begin) < delta)
+                {
+                    Thread.sleep(delta - (end - begin));
+                }
+                
+                delta = end - begin;
+                
+                // Minimum delta
+                if (delta < 20)
+                    delta = 20;
+                
+                // Maximum delta    
+                if (delta > 100)
+                    delta = 100;
             }
         }
         catch (InterruptedException e)

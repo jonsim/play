@@ -21,8 +21,8 @@ class Player implements KeyListener
     int height = 40;
     
     float y_speed = 0;
-    final int VPPS = 500;
-    final int HPPS = 300;
+    final int VPPS = 600;
+    final int HPPS = 400;
     
     int y_initial;
     int max_height = 0;
@@ -88,10 +88,10 @@ class Player implements KeyListener
         g.drawImage(penguin, x(), 300 - height, null);
     }
     
-    void update (float time_delta)
+    void update (double time_delta)
     {    
         if (!on_ground)
-            y_speed += world.gravity;
+            y_speed += world.gravity * time_delta;
         
         if (x < 0)
             x = 0;
@@ -126,6 +126,10 @@ class Player implements KeyListener
         {
             max_height = y();
             world.hud.score = (max_height - 300 - height) / 50;    
+        }
+        else if (y() < (max_height - 600) && y() > 600)
+        {
+            y = 600;
         }
     }
     

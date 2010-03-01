@@ -16,7 +16,7 @@ class Background extends Item
 	    
 	    try
         {
-            background = ImageIO.read(new File("images/background.jpg"));
+            background = ImageIO.read(new File("images/background.png"));
         }
         catch (IOException e)
         {
@@ -26,11 +26,15 @@ class Background extends Item
 	
 	void draw(Graphics2D g)
     {
-        //g.setColor(new Color(74, 139, 238));
+        Color gradient_top = new Color(74, 139, 238);
+        Color gradient_bottom = new Color(184,206,239);
         
-        g.setPaint(new GradientPaint(0,0,Color.RED,0,600,Color.GREEN));
-        
+        g.setColor(gradient_top);
         g.fillRect(0, 0, world.width, world.height);
-        g.drawImage(background, 0, world.abs_y() - y(), null);
+        
+        g.setPaint(new GradientPaint(0, world.abs_y() - y() + (height - 250), gradient_bottom, 0, world.abs_y() - y(), gradient_top));
+        g.fillRect(0, world.abs_y() - y(), world.width, height - 250);
+        
+        g.drawImage(background, 0, world.abs_y() - y() + (height - 350), null);
     }
 }

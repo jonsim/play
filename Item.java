@@ -33,12 +33,12 @@ class Item
         g.fillRect(x(), world.abs_y() - y(), width, height);
     }
 	
-	void update(float time_delta)
+	void update(double time_delta)
 	{
 	    // Gravity
 	    if (!fixed)
         {
-            y_speed += world.gravity * 0.5f;
+            y_speed += world.gravity * 0.5 * time_delta;
             
             y += y_speed * time_delta;
 
