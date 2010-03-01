@@ -31,8 +31,6 @@ class World extends JPanel
 	    this.width = width;
 	    this.height = height;
 	    
-	    // (500 - 48) / 2 = 226
-	    // 300 + 48 = 348
 	    player = new Player(this, 226, 340);
         hud = new Hud(this, 20, 30);
 	    
@@ -47,35 +45,15 @@ class World extends JPanel
         spawnLaunchers(launcher_height, launcher_height + height);
 	}
 	
-	// Borked
-	void remove(Item item)
-	{
-	    for (int i = 0; i < items.size(); i++)
-	    {
-	        if (items.get(i) == item) {
-	            items.remove(i);
-	            break;
-	        }
-	    }
-	    
-	    System.err.println("Item trying to remove doesn't exist in items array!");
-	}
-	
 	void update(float time_delta)
 	{	    
 	    System.out.println(items.size() + " items " + background.size() + " background");
 	    
 	    if ((cloud_height - player.y) < 600)
-	    {
-	        System.out.println("Updating clouds");
 	        spawnClouds(cloud_height, cloud_height + height);    
-	    }
 	    
 	    if ((launcher_height - player.y) < 600)
-	    {
-	        System.out.println("Updating launchers");
 	        spawnLaunchers(launcher_height, launcher_height + height);    
-	    }
 	    
 	    player.update(time_delta);
 	    
@@ -100,7 +78,7 @@ class World extends JPanel
 	        item.update(time_delta);
 	        
             // Purge
-	        if (item.dead || (player.y - item.y) > 600)
+	        if (item.purge || (player.y - item.y) > 600)
 	            items_iterator.remove();
 	    }
 	    
@@ -156,7 +134,6 @@ class World extends JPanel
 	    {    
 	        for (int j = 0; j < n; j++)
 	        {
-	            // 15 = width of launcher
 	            int x = random.nextInt(width - 30);
 	            int y = i + random.nextInt(gap);
 	            

@@ -20,9 +20,6 @@ class Play implements Runnable
         w.setTitle("Penguin");
         w.setResizable(false);
         
-        //Player player = new Player();        
-        //w.addKeyListener(player);
-        
         w.addKeyListener(world.player);
         w.add(world);
         
@@ -37,7 +34,6 @@ class Play implements Runnable
         try {
             while (true)
             {
-            //    System.out.println("Frame");
                 world.update(1 / FPS);
                 Thread.sleep(1000 / (int) FPS);
             }

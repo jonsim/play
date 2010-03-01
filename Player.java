@@ -14,29 +14,30 @@ class Player implements KeyListener
 {
     boolean fixed = false;
     
-    final int VPPS = 500;
-    final int HPPS = 300;
-        
-    // double friction = 0.4;
+    World world;
+    
     float x, y;
-    int max_height = 0;
     int width = 48;
     int height = 40;
+    
     float y_speed = 0;
+    final int VPPS = 500;
+    final int HPPS = 300;
+    
     int y_initial;
-    // TODO: Might not need y
-
+    int max_height = 0;
+    
     boolean key_up = false;
     boolean key_left = false;
     boolean key_right = false;
     boolean on_ground = true;
     
-    World world;
-    
-    BufferedImage penguin_left;
-    BufferedImage penguin_right;
-    BufferedImage penguin_up;
-    BufferedImage penguin_down;
+    BufferedImage penguin_leftup;
+    BufferedImage penguin_leftdown;
+    BufferedImage penguin_rightup;
+    BufferedImage penguin_rightdown;
+    BufferedImage penguin_centreup;
+    BufferedImage penguin_centredown;
     
     Player (World world, int x, int y)
 	{
@@ -48,10 +49,12 @@ class Player implements KeyListener
 	    
 	    try
         {
-            penguin_left = ImageIO.read(new File("images/player/penguin_left.png"));
-            penguin_right = ImageIO.read(new File("images/player/penguin_right.png"));
-            penguin_up = ImageIO.read(new File("images/player/penguin_up.png"));
-            penguin_down = ImageIO.read(new File("images/player/penguin_down.png"));
+            penguin_leftup = ImageIO.read(new File("images/player/penguin_leftup.png"));
+            penguin_leftdown = ImageIO.read(new File("images/player/penguin_leftdown.png"));
+            penguin_rightup = ImageIO.read(new File("images/player/penguin_rightup.png"));
+            penguin_rightdown = ImageIO.read(new File("images/player/penguin_rightdown.png"));
+            penguin_centreup = ImageIO.read(new File("images/player/penguin_centreup.png"));
+            penguin_centredown = ImageIO.read(new File("images/player/penguin_centredown.png"));                                                
         }
         catch (IOException e)
         {
@@ -61,14 +64,28 @@ class Player implements KeyListener
 
 	void draw(Graphics2D g)
     {        
-        if (key_right)
-            g.drawImage(penguin_right, x(), 300 - height, null);
-        else if (key_left)
-            g.drawImage(penguin_left,  x(), 300 - height, null);
-        else if (y_speed > 0)
-            g.drawImage(penguin_up,  x(), 300 - height, null);
+        BufferedImage penguin;
+
+        if (y_speed > 0)
+        {
+            if (key_right)
+                penguin = penguin_rightup;
+            else if (key_left)
+                penguin = penguin_leftup;
+            else
+                penguin = penguin_centreup;
+        }
         else
-            g.drawImage(penguin_down,  x(), 300 - height, null);
+        {
+            if (key_right)
+                penguin = penguin_rightdown;
+            else if (key_left)
+                penguin = penguin_leftdown;
+            else
+                penguin = penguin_centredown;
+        }
+        
+        g.drawImage(penguin, x(), 300 - height, null);
     }
     
     void update (float time_delta)
@@ -100,7 +117,7 @@ class Player implements KeyListener
         }
         else if (y < y_initial)
         {
-            y = 300 + height;
+            y = y_initial;
             y_speed = 0;
             on_ground = true;
         }

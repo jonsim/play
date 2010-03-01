@@ -53,7 +53,7 @@ class Launcher extends Item
             
             if (life <= 0)
             {
-                dead = true;
+                purge = true;
             }
         }
         else if (collision())

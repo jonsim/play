@@ -15,7 +15,7 @@ class Item
 	float x_speed = 0;
 	float y_speed = 0;
 	
-	boolean dead = false;
+	boolean purge = false;
 	boolean fixed = true;
 	
 	Item (World world, int x, int y, int width, int height)
@@ -42,9 +42,8 @@ class Item
             
             y += y_speed * time_delta;
 
-            // TODO change this
             if (y <= (300 + height))
-                dead = true;
+                purge = true;
         }
 	}
 	
@@ -56,11 +55,5 @@ class Item
 	int y()
 	{
 	    return Math.round(y);
-	}
-	
-	// For debugging purposes only
-	void print()
-	{
-	    System.out.println("x:" + x() + " y:" + y() + " width:" + width + " height:" + height);
 	}
 }

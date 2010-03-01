@@ -1,5 +1,6 @@
 import java.awt.Color;
 import java.awt.Graphics2D;
+import java.awt.GradientPaint;
 
 import java.awt.image.BufferedImage;
 import javax.imageio.ImageIO;
@@ -25,7 +26,10 @@ class Background extends Item
 	
 	void draw(Graphics2D g)
     {
-        g.setColor(new Color(74, 139, 238));
+        //g.setColor(new Color(74, 139, 238));
+        
+        g.setPaint(new GradientPaint(0,0,Color.RED,0,600,Color.GREEN));
+        
         g.fillRect(0, 0, world.width, world.height);
         g.drawImage(background, 0, world.abs_y() - y(), null);
     }
