@@ -18,17 +18,17 @@ class Cloud extends Item
     static Random random;
     
     int cloud;
-
+    
     Cloud (World world, int x, int y, int width, int height)
-	{
-	    super(world, x, y, width, height);
-	    
-	    if (clouds.size() == 0)
-	    {
-	        for (int i = 0; i < 10; i++)
-	        {
-    	        try
-    	        {
+    {
+        super(world, x, y, width, height);
+        
+        if (clouds.size() == 0)
+        {
+            for (int i = 0; i < 10; i++)
+            {
+                try
+                {
                     clouds.add(ImageIO.read(new File("images/clouds/cloud" + i + ".png")));
                 }
                 catch (IOException e)
@@ -38,12 +38,12 @@ class Cloud extends Item
             }
             
             random = new Random(date.getTime());
-	    }
-	    
-	    cloud = random.nextInt(clouds.size());
-	}
-	
-	void draw(Graphics2D g)
+        }
+        
+        cloud = random.nextInt(clouds.size());
+    }
+    
+    void draw(Graphics2D g)
     {
         g.drawImage(clouds.get(cloud), x(), world.abs_y() - y(), null);
     }

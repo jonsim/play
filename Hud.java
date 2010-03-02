@@ -11,17 +11,17 @@ class Hud
     
     World world;
     
-	Hud (World world, int x, int y)
-	{
-	    this.world = world;
-	    this.x = x;
-	    this.y = y;
-	}
-	
-	void draw(Graphics2D g)
-	{
-	    g.setFont(new Font("Verdana", Font.BOLD, 24));
-	    g.setColor(new Color(255, 0, 0));
-	    g.drawString("Score: " + score, x, y);
-	}
+    Hud (World world, int x, int y)
+    {
+        this.world = world;
+        this.x = x;
+        this.y = y;
+    }
+    
+    void draw(Graphics2D g)
+    {
+        g.setFont(new Font("Verdana", Font.BOLD, 24));
+        g.setColor(new Color(35, 52, 73));
+        g.drawString(score + "m", x, y);
+    }
 }

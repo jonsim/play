@@ -40,69 +40,92 @@ class Player implements KeyListener
     BufferedImage penguin_centredown;
     
     Player (World world, int x, int y)
-	{
-	    this.world = world;
-	    this.x = x;
-	    this.y = y;
-	    
-	    y_initial = y;
-	    
-	    try
+    {
+        this.world = world;
+        this.x = x;
+        this.y = y;
+        
+        y_initial = y;
+        
+        try
         {
             penguin_leftup = ImageIO.read(new File("images/player/penguin_leftup.png"));
             penguin_leftdown = ImageIO.read(new File("images/player/penguin_leftdown.png"));
             penguin_rightup = ImageIO.read(new File("images/player/penguin_rightup.png"));
             penguin_rightdown = ImageIO.read(new File("images/player/penguin_rightdown.png"));
             penguin_centreup = ImageIO.read(new File("images/player/penguin_centreup.png"));
-            penguin_centredown = ImageIO.read(new File("images/player/penguin_centredown.png"));                                                
+            penguin_centredown = ImageIO.read(new File("images/player/penguin_centredown.png"));
         }
         catch (IOException e)
         {
             System.err.println("Error reading images!");
         }
-	}
-
-	void draw(Graphics2D g)
-    {        
+    }
+    
+    void draw(Graphics2D g)
+    {
         BufferedImage penguin;
-
+        
         if (y_speed > 0)
         {
             if (key_right)
+            {
                 penguin = penguin_rightup;
+            }
             else if (key_left)
+            {
                 penguin = penguin_leftup;
+            }
             else
+            {
                 penguin = penguin_centreup;
+            }
         }
         else
         {
             if (key_right)
+            {
                 penguin = penguin_rightdown;
+            }
             else if (key_left)
+            {
                 penguin = penguin_leftdown;
+            }
             else
+            {
                 penguin = penguin_centredown;
+            }
         }
         
         g.drawImage(penguin, x(), 300 - height, null);
     }
     
     void update (double time_delta)
-    {    
+    {
         if (!on_ground)
+        {
             y_speed += world.gravity * time_delta;
+        }
         
         if (x < 0)
+        {
             x = 0;
+        }
         else if (x > 500 - width)
+        {
             x = 500 - width;
+        }
         
         if (key_left  && x > 0)
+        {
             x -= HPPS * time_delta;
+        }
+        
         if (key_right && x < 500 - width)
+        {
             x += HPPS * time_delta;
-            
+        }
+        
         if (key_up && on_ground)
         {
             y_speed = VPPS;
@@ -125,7 +148,7 @@ class Player implements KeyListener
         if (y() > max_height)
         {
             max_height = y();
-            world.hud.score = (max_height - 300 - height) / 50;    
+            world.hud.score = (max_height - 300 - height) / 50;
         }
         else if (y() < (max_height - 600) && y() > 600)
         {
@@ -133,15 +156,15 @@ class Player implements KeyListener
         }
     }
     
-	int x()
-	{
-	    return Math.round(x);
-	}
-	
-	int y()
-	{
-	    return Math.round(y);
-	}
+    int x()
+    {
+        return Math.round(x);
+    }
+    
+    int y()
+    {
+        return Math.round(y);
+    }
     
     public void keyTyped (KeyEvent e)
     {
@@ -150,25 +173,37 @@ class Player implements KeyListener
     public void keyPressed (KeyEvent e)
     {
         if (keyUp(e))
+        {
             key_up = true;
-            
+        }
+        
         if (keyLeft(e))
+        {
             key_left = true;
-            
+        }
+        
         if (keyRight(e))
+        {
             key_right = true;
+        }
     }
     
     public void keyReleased (KeyEvent e)
     {
         if (keyUp(e))
+        {
             key_up = false;
-            
+        }
+        
         if (keyLeft(e))
+        {
             key_left = false;
-            
+        }
+        
         if (keyRight(e))
+        {
             key_right = false;
+        }
     }
     
     boolean keyUp(KeyEvent e)
