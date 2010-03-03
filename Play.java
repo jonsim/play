@@ -114,7 +114,7 @@ class Play implements Runnable
     void animate()
     {        
         // Milliseconds
-        long delta = 10, begin, end;
+        long delta = 20, begin, end;
         Date date;
         
         try
@@ -149,9 +149,9 @@ class Play implements Runnable
                 delta = end - begin;
                 
                 // Minimum delta
-                if (delta < 10)
+                if (delta < 20)
                 {
-                    delta = 10;
+                    delta = 20;
                 }
 
                 // Maximum delta

@@ -54,7 +54,7 @@ class Title extends JPanel implements ActionListener
         
         try
         {
-            title = ImageIO.read(new File("images/title.png"));
+            title = ImageIO.read(getClass().getResource("images/title.png"));
         }
         catch (IOException e)
         {

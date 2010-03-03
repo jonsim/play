@@ -14,7 +14,7 @@ class Foreground extends Item
         
         try
         {
-            foreground = ImageIO.read(new File("images/foreground.png"));
+            foreground = ImageIO.read(getClass().getResource("images/foreground.png"));
         }
         catch (IOException e)
         {

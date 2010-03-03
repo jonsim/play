@@ -58,14 +58,14 @@ class Player extends JComponent
     {
         try
         {   
-            penguin_leftup = ImageIO.read(new File("images/player/penguin" + i + "_leftup.png"));
-            penguin_leftdown = ImageIO.read(new File("images/player/penguin" + i + "_leftdown.png"));
-            penguin_rightup = ImageIO.read(new File("images/player/penguin" + i + "_rightup.png"));
-            penguin_rightdown = ImageIO.read(new File("images/player/penguin" + i + "_rightdown.png"));
-            penguin_centreup = ImageIO.read(new File("images/player/penguin" + i + "_centreup.png"));
-            penguin_centredown = ImageIO.read(new File("images/player/penguin" + i + "_centredown.png"));
+            penguin_leftup = ImageIO.read(getClass().getResource("images/player/penguin" + i + "_leftup.png"));
+            penguin_leftdown = ImageIO.read(getClass().getResource("images/player/penguin" + i + "_leftdown.png"));
+            penguin_rightup = ImageIO.read(getClass().getResource("images/player/penguin" + i + "_rightup.png"));
+            penguin_rightdown = ImageIO.read(getClass().getResource("images/player/penguin" + i + "_rightdown.png"));
+            penguin_centreup = ImageIO.read(getClass().getResource("images/player/penguin" + i + "_centreup.png"));
+            penguin_centredown = ImageIO.read(getClass().getResource("images/player/penguin" + i + "_centredown.png"));
             
-            game_over = ImageIO.read(new File("images/game_over.png"));
+            game_over = ImageIO.read(getClass().getResource("images/game_over.png"));
         }
         catch (IOException e)
         {

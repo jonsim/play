@@ -29,7 +29,7 @@ class Cloud extends Item
             {
                 try
                 {
-                    clouds.add(ImageIO.read(new File("images/clouds/cloud" + i + ".png")));
+                    clouds.add(ImageIO.read(getClass().getResource("images/clouds/cloud" + i + ".png")));
                 }
                 catch (IOException e)
                 {

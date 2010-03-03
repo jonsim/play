@@ -47,7 +47,7 @@ class Launcher extends Item
     {
         try
         {
-            return ImageIO.read(new File(s));
+            return ImageIO.read(getClass().getResource(s));
         }
         catch (IOException e)
         {
