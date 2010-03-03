@@ -3,21 +3,25 @@ import java.awt.image.BufferedImage;
 
 class MegaLauncher extends Launcher
 {
-    static BufferedImage fish2;
+    static BufferedImage fish2_left;
+    static BufferedImage fish2_right;
+    
+    static int score = 2;
     
     MegaLauncher (World world, int x, int y, int width, int height)
     {
         super(world, x, y, width, height);
         
-        if (fish2 == null)
+        if (fish2_left == null)
         {
-            fish2 = load_image("images/launchers/fish2.png");
+            fish2_left = load_image("images/launchers/fish2_left.png");
+            fish2_right = load_image("images/launchers/fish2_right.png");
         }
     }
     
     BufferedImage fish()
     {
-        return fish2;
+        return direction ? fish2_right : fish2_left;
     }
     
     void launch_player()

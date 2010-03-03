@@ -1,5 +1,6 @@
+import javax.swing.JComponent;
+
 import java.util.ArrayList;
-import java.awt.event.*;
 
 import java.awt.Graphics2D;
 import java.awt.Color;
@@ -10,7 +11,7 @@ import java.io.*;
 
 // Key Codes: http://livedocs.adobe.com/flash/9.0/main/wwhelp/wwhimpl/common/html/wwhelp.htm?context=LiveDocs_Parts&file=00001136.html
 
-class Player implements KeyListener
+class Player extends JComponent
 {
     boolean fixed = false;
     
@@ -46,15 +47,18 @@ class Player implements KeyListener
         this.y = y;
         
         y_initial = y;
-        
+    }
+    
+    void setPlayerImages(int i)
+    {
         try
-        {
-            penguin_leftup = ImageIO.read(new File("images/player/penguin_leftup.png"));
-            penguin_leftdown = ImageIO.read(new File("images/player/penguin_leftdown.png"));
-            penguin_rightup = ImageIO.read(new File("images/player/penguin_rightup.png"));
-            penguin_rightdown = ImageIO.read(new File("images/player/penguin_rightdown.png"));
-            penguin_centreup = ImageIO.read(new File("images/player/penguin_centreup.png"));
-            penguin_centredown = ImageIO.read(new File("images/player/penguin_centredown.png"));
+        {   
+            penguin_leftup = ImageIO.read(new File("images/player/penguin" + i + "_leftup.png"));
+            penguin_leftdown = ImageIO.read(new File("images/player/penguin" + i + "_leftdown.png"));
+            penguin_rightup = ImageIO.read(new File("images/player/penguin" + i + "_rightup.png"));
+            penguin_rightdown = ImageIO.read(new File("images/player/penguin" + i + "_rightdown.png"));
+            penguin_centreup = ImageIO.read(new File("images/player/penguin" + i + "_centreup.png"));
+            penguin_centredown = ImageIO.read(new File("images/player/penguin" + i + "_centredown.png"));
         }
         catch (IOException e)
         {
@@ -148,9 +152,8 @@ class Player implements KeyListener
         if (y() > max_height)
         {
             max_height = y();
-            world.hud.score = (max_height - 300 - height) / 50;
         }
-        else if (y() < (max_height - 600) && y() > 600)
+        else if (y() < (max_height - 1200) && y() > 600)
         {
             y = 600;
         }
@@ -164,60 +167,5 @@ class Player implements KeyListener
     int y()
     {
         return Math.round(y);
-    }
-    
-    public void keyTyped (KeyEvent e)
-    {
-    }
-    
-    public void keyPressed (KeyEvent e)
-    {
-        if (keyUp(e))
-        {
-            key_up = true;
-        }
-        
-        if (keyLeft(e))
-        {
-            key_left = true;
-        }
-        
-        if (keyRight(e))
-        {
-            key_right = true;
-        }
-    }
-    
-    public void keyReleased (KeyEvent e)
-    {
-        if (keyUp(e))
-        {
-            key_up = false;
-        }
-        
-        if (keyLeft(e))
-        {
-            key_left = false;
-        }
-        
-        if (keyRight(e))
-        {
-            key_right = false;
-        }
-    }
-    
-    boolean keyUp(KeyEvent e)
-    {
-        return e.getKeyCode() == 38 || e.getKeyCode() == 32 || e.getKeyCode() == 87;
-    }
-    
-    boolean keyLeft(KeyEvent e)
-    {
-        return e.getKeyCode() == 37 || e.getKeyCode() == 65;
-    }
-    
-    boolean keyRight(KeyEvent e)
-    {
-        return e.getKeyCode() == 39 || e.getKeyCode() == 68;
     }
 }

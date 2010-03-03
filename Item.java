@@ -27,6 +27,13 @@ abstract class Item
         this.y = y;
     }
     
+    Item (World world, int x, int y)
+    {
+        this.world = world;
+        this.x = x;
+        this.y = y;
+    }
+    
     abstract void draw(Graphics2D g);
     
     void update(double time_delta)

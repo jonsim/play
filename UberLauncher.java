@@ -3,21 +3,25 @@ import java.awt.image.BufferedImage;
 
 class UberLauncher extends Launcher
 {
-    static BufferedImage fish3;
+    static BufferedImage fish3_left;
+    static BufferedImage fish3_right;
+    
+    static int score = 5;
     
     UberLauncher (World world, int x, int y, int width, int height)
     {
         super(world, x, y, width, height);
         
-        if (fish3 == null)
+        if (fish3_left == null)
         {
-            fish3 = load_image("images/launchers/fish3.png");
+            fish3_left = load_image("images/launchers/fish3_left.png");
+            fish3_right = load_image("images/launchers/fish3_right.png");
         }
     }
     
     BufferedImage fish()
     {
-        return fish3;
+        return direction ? fish3_right : fish3_left;
     }
     
     void launch_player()

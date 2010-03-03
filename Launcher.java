@@ -4,23 +4,43 @@ import java.awt.image.BufferedImage;
 import javax.imageio.ImageIO;
 import java.io.*;
 
+import java.util.Date;
+import java.util.Random;
+
 class Launcher extends Item
 {        
-    static BufferedImage fish;
-    static BufferedImage fish_dead;
+    static BufferedImage fish_left;
+    static BufferedImage fish_right;
+    static BufferedImage fish_dead_left;
+    static BufferedImage fish_dead_right;
+    
+    static Random random;
     
     float life = 1;
     boolean dying = false;
+    boolean direction;
+    
+    static int score = 1;
     
     Launcher (World world, int x, int y, int width, int height)
     {
         super(world, x, y, width, height);
         
-        if (fish == null)
+        if (random == null)
         {
-            fish = load_image("images/launchers/fish.png");
-            fish_dead = load_image("images/launchers/fish_dead.png");
+            Date date = new Date();
+            random = new Random(date.getTime());
         }
+        
+        if (fish_left == null)
+        {
+            fish_left = load_image("images/launchers/fish_left.png");
+            fish_right = load_image("images/launchers/fish_right.png");
+            fish_dead_left = load_image("images/launchers/fish_dead_left.png");
+            fish_dead_right = load_image("images/launchers/fish_dead_right.png");
+        }
+        
+        direction = random.nextBoolean();
     }
     
     BufferedImage load_image(String s)
@@ -39,12 +59,17 @@ class Launcher extends Item
     
     BufferedImage fish()
     {
-        return fish;
+        return direction ? fish_right : fish_left;
+    }
+    
+    BufferedImage fish_dead()
+    {
+        return direction ? fish_dead_right : fish_dead_left;
     }
     
     void draw(Graphics2D g)
     {
-        BufferedImage fish = dying ? fish_dead : fish();
+        BufferedImage fish = dying ? fish_dead() : fish();
         g.drawImage(fish, x(), world.abs_y() - y(), null);
     }
     
@@ -64,6 +89,7 @@ class Launcher extends Item
         else if (collision())
         {
             launch_player();
+            world.hud.add_score(score);
             
             dying = true;
             fixed = false;

@@ -12,6 +12,7 @@ import java.util.Random;
 
 class World extends JPanel
 {
+    ArrayList<Item> foreground = new ArrayList<Item>();
     ArrayList<Item> background = new ArrayList<Item>();
     ArrayList<Item> items = new ArrayList<Item>();
     
@@ -34,16 +35,20 @@ class World extends JPanel
         this.height = height;
         
         player = new Player(this, 226, 340);
-        hud = new Hud(this, 20, 30);
         
         setPreferredSize(new Dimension(this.width, this.height));
         
-        background.add(new Background(this, 0, 2400, 500, 2400));
+        background.add(new Background(this, 0, 2400, 500, 2150));
+        foreground.add(new Foreground(this, 0, 350, 500, 350));
+        
+        hud = new Hud(this, 20, 30);
+        foreground.add(hud);
         
         cloud_height = 500;
         spawnClouds(cloud_height, cloud_height + height);
         
-        launcher_height = 415;
+        //launcher_height = 415;
+        launcher_height = 400;
         spawnLaunchers(launcher_height, launcher_height + height);
     }
     
@@ -51,7 +56,7 @@ class World extends JPanel
     {
         //System.out.print(items.size() + " " + background.size());
         
-        if ((cloud_height - player.y) < 600)
+        if ((cloud_height - player.y) < 1200)
         {
             spawnClouds(cloud_height, cloud_height + height);
         }
@@ -123,7 +128,17 @@ class World extends JPanel
         }
         
         player.draw(canvas);
-        hud.draw(canvas);
+        
+        for (Object o : foreground.toArray())
+        {
+            item = (Item) o;
+            
+            try
+            {
+                item.draw(canvas);
+            }
+            catch (NullPointerException e) {}
+        }
     }
     
     int abs_y()
@@ -133,11 +148,57 @@ class World extends JPanel
     
     void spawnLaunchers(int from, int to)
     {
+        int x = 0;
+        int y = 0;
+        int px = 150;
+        int py = from;
+        int dx = 300;
+        int dy = 180;
+        float c  = 0f;
+        
+        float height_from_start = (player.y() - player.y_initial) / 50;
+        
+        Date date = new Date();
+        Random random = new Random(date.getTime());
+        
+        //dx = (int) Math.round(height_from_start * 0.25) + 50;
+        dy = (int) Math.round(height_from_start * 0.15) + 75;
+        
+        while (py < to)
+        {
+            x = px + random.nextInt(dx * 2) - dx;
+            if (x < 0) x = random.nextInt(dx);
+            else if (x > 470) x = (width - dx - 30) + random.nextInt(dx);
+            y = py  + random.nextInt(Math.round(dy + dy*c)) - Math.round(dy*c);
+            
+            if (random.nextInt(200) == 0)
+            {
+                items.add(new UberLauncher(this, x, y, 30, 15));
+            }
+            else if (random.nextInt(40) == 0)
+            {
+                items.add(new MegaLauncher(this, x, y, 30, 15));
+            }
+            else if (random.nextInt(10) == 0)
+            {
+                items.add(new MovingLauncher(this, x, y, 30, 15));
+            }
+            else
+            {
+                items.add(new Launcher(this, x, y, 30, 15));
+            }   
+            
+            px = x;
+            py = y;
+        }    
+        launcher_height = py;
+        
+        /*
         int min_gap = 50;
         int max_gap = 195;
         
-        int height_from_start = player.y() - player.y_initial;
         int max_difficulty_height = 50000;
+        int height_from_start = player.y() - player.y_initial;
         
         float difficulty = (float) height_from_start / max_difficulty_height;
         
@@ -163,7 +224,11 @@ class World extends JPanel
                     max_y = y;
                 }
                 
-                if (random.nextInt(200) == 0)
+                if (max_y > 25000 && random.nextInt(10) == 0)
+                {
+                    items.add(new UberLauncher(this, x, y, 30, 15));
+                }
+                else if (random.nextInt(200) == 0)
                 {
                     items.add(new UberLauncher(this, x, y, 30, 15));
                 }
@@ -178,7 +243,7 @@ class World extends JPanel
             }
         }
         
-        launcher_height = max_y + gap;
+        launcher_height = max_y + gap;*/
     }
     
     void spawnClouds(int from, int to)
