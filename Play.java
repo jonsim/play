@@ -1,9 +1,5 @@
-import javax.swing.JFrame;
-import javax.swing.JPanel;
-import javax.swing.SwingUtilities;
-
-import java.awt.BorderLayout;
-import java.awt.Container;
+import javax.swing.*;
+import java.awt.*;
 
 import java.util.Date;
 
@@ -22,9 +18,36 @@ class Play implements Runnable
     
     public static void main(String[] args)
     {
+        try
+        {
+            UIManager.setLookAndFeel(UIManager.getSystemLookAndFeelClassName());
+        }
+        catch (UnsupportedLookAndFeelException e)
+        {
+            printException(e);
+        }
+        catch (ClassNotFoundException e)
+        {
+            printException(e);
+        }
+        catch (InstantiationException e)
+        {
+            printException(e);
+        }
+        catch (IllegalAccessException e)
+        {
+            printException(e);
+        }
+        
         Play program = new Play();
         SwingUtilities.invokeLater(program);
         program.animate();
+    }
+    
+    static void printException(Exception e)
+    {
+        System.err.println(e);
+        System.exit(1);
     }
     
     public void run()
@@ -68,6 +91,26 @@ class Play implements Runnable
         w.pack();
     }
     
+    void show_title()
+    {        
+        world1.new_game = false;
+        world2.new_game = false;
+        
+        panel.remove(world1);
+        
+        if (two_player)
+        {
+            panel.remove(world2);
+        }
+        
+        world1 = new World(500, 600);
+        world2 = new World(500, 600);
+        
+        w.pack();
+        panel.add(title);
+        w.pack();
+    }
+    
     void animate()
     {        
         // Milliseconds
@@ -78,6 +121,11 @@ class Play implements Runnable
         {
             while (true)
             {
+                if (world1.new_game && (!two_player || (two_player && world2.new_game)))
+                {
+                    show_title();
+                }
+                
                 //System.out.println(1000 / (double) delta);
                 
                 date = new Date();

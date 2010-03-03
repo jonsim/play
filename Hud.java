@@ -23,13 +23,13 @@ class Hud extends Item
     
     int multiplier()
     {
-        return Math.round((world.player.max_height - world.player.y_initial) / 500);
+        return Math.round((world.player.max_height - world.player.y_initial) / 500) + 1;
     }
     
     void draw(Graphics2D g)
     {
         g.setFont(new Font("Verdana", Font.BOLD, 24));
         g.setColor(new Color(35, 52, 73));
-        g.drawString(total_score() + " (x" + multiplier() + ")", x, y);
+        g.drawString(total_score() + " (" + ((world.player.max_height - world.player.y_initial) / 50) + "m)", x, y);
     }
 }

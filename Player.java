@@ -39,6 +39,11 @@ class Player extends JComponent
     BufferedImage penguin_rightdown;
     BufferedImage penguin_centreup;
     BufferedImage penguin_centredown;
+    BufferedImage game_over;
+    
+    boolean dying = false;
+    
+    float death_counter = 0;
     
     Player (World world, int x, int y)
     {
@@ -59,6 +64,8 @@ class Player extends JComponent
             penguin_rightdown = ImageIO.read(new File("images/player/penguin" + i + "_rightdown.png"));
             penguin_centreup = ImageIO.read(new File("images/player/penguin" + i + "_centreup.png"));
             penguin_centredown = ImageIO.read(new File("images/player/penguin" + i + "_centredown.png"));
+            
+            game_over = ImageIO.read(new File("images/game_over.png"));
         }
         catch (IOException e)
         {
@@ -102,6 +109,11 @@ class Player extends JComponent
         }
         
         g.drawImage(penguin, x(), 300 - height, null);
+        
+        if (dying)
+        {
+            g.drawImage(game_over, 72, 100, null);
+        }
     }
     
     void update (double time_delta)
@@ -156,6 +168,22 @@ class Player extends JComponent
         else if (y() < (max_height - 1200) && y() > 600)
         {
             y = 600;
+            dying = true;
+        }
+        
+        if (on_ground && (max_height - y_initial) > 200)
+        {
+            dying = true;
+        }
+        
+        if (dying && on_ground)
+        {
+            if (death_counter >= 2)
+            {
+                world.new_game = true;
+            }
+            
+            death_counter += time_delta;
         }
     }
     

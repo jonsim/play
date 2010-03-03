@@ -1,8 +1,8 @@
-import javax.swing.JFrame;
 import javax.swing.JPanel;
 import javax.swing.JButton;
 import javax.swing.Box;
 import javax.swing.BoxLayout;
+import java.awt.BorderLayout;
 import java.awt.Dimension;
 
 import java.awt.Graphics;
@@ -43,11 +43,14 @@ class Title extends JPanel implements ActionListener
         start.addActionListener(this);
         start_2p.addActionListener(this);
         
-        setLayout(new BoxLayout(this, BoxLayout.Y_AXIS));
-        add(Box.createVerticalGlue());
+        setLayout(new BorderLayout());
         
-        add(start);
-        add(start_2p);
+        JPanel panel = new JPanel();
+        panel.setOpaque(false);
+        panel.add(start);
+        panel.add(start_2p);
+        
+        add(panel, BorderLayout.SOUTH);
         
         try
         {
