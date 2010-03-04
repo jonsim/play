@@ -1,27 +1,19 @@
-import javax.swing.JPanel;
-import javax.swing.JButton;
-import javax.swing.Box;
-import javax.swing.BoxLayout;
-import java.awt.BorderLayout;
-import java.awt.Dimension;
-
-import java.awt.Graphics;
-import java.awt.Graphics2D;
+import javax.swing.*;
+import java.awt.*;
+import java.awt.event.*;
 
 import java.awt.image.BufferedImage;
 import javax.imageio.ImageIO;
-import java.io.*;
-
-import java.awt.event.*;
+import java.io.IOException;
 
 class Title extends JPanel implements ActionListener
 {
-    BufferedImage title;
-    
     Play w;
     
     int width;
     int height;
+    
+    BufferedImage title;
     
     JButton start;
     JButton start_2p;
@@ -33,6 +25,7 @@ class Title extends JPanel implements ActionListener
         this.height = height;
         
         setPreferredSize(new Dimension(this.width, this.height));
+        setLayout(new BorderLayout());
         
         start = new JButton("1 Player");
         start_2p = new JButton("2 Player");
@@ -42,8 +35,6 @@ class Title extends JPanel implements ActionListener
         
         start.addActionListener(this);
         start_2p.addActionListener(this);
-        
-        setLayout(new BorderLayout());
         
         JPanel panel = new JPanel();
         panel.setOpaque(false);
@@ -59,6 +50,7 @@ class Title extends JPanel implements ActionListener
         catch (IOException e)
         {
             System.err.println("Error reading image!");
+            System.exit(1);
         }
     }
     
@@ -79,7 +71,6 @@ class Title extends JPanel implements ActionListener
             w.two_player = true;
         }
         
-        start.setFocusable(false);
-        w.show_world();
+        w.showWorld();
     }
 }

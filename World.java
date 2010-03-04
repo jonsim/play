@@ -1,12 +1,8 @@
-import javax.swing.JPanel;
-import java.awt.Dimension;
+import javax.swing.*;
+import java.awt.*;
 
 import java.util.ArrayList;
 import java.util.Iterator;
-
-import java.awt.Graphics;
-import java.awt.Graphics2D;
-
 import java.util.Date;
 import java.util.Random;
 
@@ -49,7 +45,6 @@ class World extends JPanel
         cloud_height = 500;
         spawnClouds(cloud_height, cloud_height + height);
         
-        //launcher_height = 415;
         launcher_height = 400;
         spawnLaunchers(launcher_height, launcher_height + height);
     }
@@ -123,7 +118,12 @@ class World extends JPanel
         for (Object o : background.toArray())
         {
             item = (Item) o;
-            item.draw(canvas);
+            
+            try
+            {
+                item.draw(canvas);
+            }
+            catch (NullPointerException e) {}
         }
         
         for (Object o : launchers.toArray())
@@ -171,8 +171,9 @@ class World extends JPanel
         Date date = new Date();
         Random random = new Random(date.getTime());
         
-        //dx = (int) Math.round(height_from_start * 0.25) + 50;
+        // dx = (int) Math.round(height_from_start * 0.25) + 50;
         dy = (int) Math.round(height_from_start * 0.15) + 75;
+        
         if (dy > 180)
         {
             dy = 180;
@@ -181,9 +182,17 @@ class World extends JPanel
         while (py < to)
         {
             x = px + random.nextInt(dx * 2) - dx;
-            if (x < 0) x = random.nextInt(dx);
-            else if (x > 470) x = (width - dx - 30) + random.nextInt(dx);
-            y = py  + random.nextInt(Math.round(dy + dy*c)) - Math.round(dy*c);
+            
+            if (x < 0)
+            {
+                x = random.nextInt(dx);
+            }
+            else if (x > 470)
+            {
+                x = (width - dx - 30) + random.nextInt(dx);
+            }
+            
+            y = py + random.nextInt(Math.round(dy + dy*c)) - Math.round(dy*c);
             
             int which_launcher = random.nextInt(200);
             
@@ -201,12 +210,13 @@ class World extends JPanel
             }
             else
             {
-                launchers.add(new Launcher(this, x, y, 30, 15));
-            }   
+                launchers.add(new StandardLauncher(this, x, y, 30, 15));
+            }
             
             px = x;
             py = y;
-        }    
+        }
+        
         launcher_height = py;
     }
     

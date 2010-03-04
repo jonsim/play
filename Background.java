@@ -1,9 +1,7 @@
-import java.awt.Color;
-import java.awt.Graphics2D;
-import java.awt.GradientPaint;
+import java.awt.*;
 
 class Background extends Item
-{    
+{
     Background (World world, int x, int y, int width, int height)
     {
         super(world, x, y, width, height);

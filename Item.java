@@ -1,5 +1,7 @@
 import java.awt.Graphics2D;
-import java.awt.Color;
+import java.awt.image.BufferedImage;
+import javax.imageio.ImageIO;
+import java.io.IOException;
 
 abstract class Item
 {
@@ -18,7 +20,7 @@ abstract class Item
     boolean purge = false;
     boolean fixed = true;
     
-    Item (World world, int x, int y, int width, int height)
+    Item(World world, int x, int y, int width, int height)
     {
         this.world = world;
         this.width = width;
@@ -27,11 +29,26 @@ abstract class Item
         this.y = y;
     }
     
-    Item (World world, int x, int y)
+    Item(World world, int x, int y)
     {
         this.world = world;
         this.x = x;
         this.y = y;
+    }
+    
+    BufferedImage loadImage(String s)
+    {
+        try
+        {
+            return ImageIO.read(getClass().getResource("images/" + s));
+        }
+        catch (IOException e)
+        {
+            System.err.println("Error reading image!");
+            System.exit(1);
+        }
+        
+        return null;
     }
     
     abstract void draw(Graphics2D g);
@@ -45,6 +62,7 @@ abstract class Item
             
             y += y_speed * time_delta;
             
+            // Remove items once they hit the ground
             if (y <= (300 + height))
             {
                 purge = true;

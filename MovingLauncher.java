@@ -1,4 +1,3 @@
-import java.awt.Graphics2D;
 import java.awt.image.BufferedImage;
 
 class MovingLauncher extends Launcher
@@ -6,17 +5,25 @@ class MovingLauncher extends Launcher
     static BufferedImage fish4_left;
     static BufferedImage fish4_right;
     
-    static int score = 10;
-    
-    MovingLauncher (World world, int x, int y, int width, int height)
+    MovingLauncher(World world, int x, int y, int width, int height)
     {
         super(world, x, y, width, height);
         
         if (fish4_left == null)
         {
-            fish4_left = load_image("images/launchers/fish4_left.png");
-            fish4_right = load_image("images/launchers/fish4_right.png");
+            fish4_left = loadImage("fish4_left.png");
+            fish4_right = loadImage("fish4_right.png");
         }
+    }
+    
+    int score()
+    {
+        return 10;
+    }
+    
+    int multiplier()
+    {
+        return 2;
     }
     
     BufferedImage fish()
@@ -24,7 +31,7 @@ class MovingLauncher extends Launcher
         return direction ? fish4_right : fish4_left;
     }
     
-    void update (double time_delta)
+    void update(double time_delta)
     {
         super.update(time_delta);
         
@@ -50,14 +57,6 @@ class MovingLauncher extends Launcher
                 x = 470;
                 direction = false;
             }
-        }
-    }
-    
-    void launch_player()
-    {
-        if ((world.player.VPPS * 2) > world.player.y_speed)
-        {
-            world.player.y_speed = world.player.VPPS * 2;
         }
     }
 }

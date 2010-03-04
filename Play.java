@@ -18,36 +18,10 @@ class Play implements Runnable
     
     public static void main(String[] args)
     {
-        try
-        {
-            UIManager.setLookAndFeel(UIManager.getSystemLookAndFeelClassName());
-        }
-        catch (UnsupportedLookAndFeelException e)
-        {
-            printException(e);
-        }
-        catch (ClassNotFoundException e)
-        {
-            printException(e);
-        }
-        catch (InstantiationException e)
-        {
-            printException(e);
-        }
-        catch (IllegalAccessException e)
-        {
-            printException(e);
-        }
-        
+        setLookAndFeel();
         Play program = new Play();
         SwingUtilities.invokeLater(program);
         program.animate();
-    }
-    
-    static void printException(Exception e)
-    {
-        System.err.println(e);
-        System.exit(1);
     }
     
     public void run()
@@ -68,7 +42,7 @@ class Play implements Runnable
         w.setVisible(true);
     }
     
-    void show_world()
+    void showWorld()
     {
         panel.remove(title);
         panel.add(world1);
@@ -87,12 +61,11 @@ class Play implements Runnable
         }
         
         w.addKeyListener(controls);
-        
         w.pack();
     }
     
-    void show_title()
-    {        
+    void showTitle()
+    {
         world1.new_game = false;
         world2.new_game = false;
         
@@ -112,7 +85,7 @@ class Play implements Runnable
     }
     
     void animate()
-    {        
+    {
         // Milliseconds
         long delta = 20, begin, end;
         Date date;
@@ -123,7 +96,7 @@ class Play implements Runnable
             {
                 if (world1.new_game && (!two_player || (two_player && world2.new_game)))
                 {
-                    show_title();
+                    showTitle();
                 }
                 
                 //System.out.println(1000 / (double) delta);
@@ -164,6 +137,37 @@ class Play implements Runnable
         catch (InterruptedException e)
         {
             System.err.println("Caught interrupt!");
+            System.exit(1);
         }
+    }
+    
+    static void setLookAndFeel()
+    {
+        try
+        {
+            UIManager.setLookAndFeel(UIManager.getSystemLookAndFeelClassName());
+        }
+        catch (UnsupportedLookAndFeelException e)
+        {
+            printException(e);
+        }
+        catch (ClassNotFoundException e)
+        {
+            printException(e);
+        }
+        catch (InstantiationException e)
+        {
+            printException(e);
+        }
+        catch (IllegalAccessException e)
+        {
+            printException(e);
+        }
+    }
+    
+    static void printException(Exception e)
+    {
+        System.err.println(e);
+        System.exit(1);
     }
 }

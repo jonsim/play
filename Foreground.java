@@ -1,8 +1,5 @@
 import java.awt.Graphics2D;
-
 import java.awt.image.BufferedImage;
-import javax.imageio.ImageIO;
-import java.io.*;
 
 class Foreground extends Item
 {
@@ -12,14 +9,7 @@ class Foreground extends Item
     {
         super(world, x, y, width, height);
         
-        try
-        {
-            foreground = ImageIO.read(getClass().getResource("images/foreground.png"));
-        }
-        catch (IOException e)
-        {
-            System.err.println("Error reading image!");
-        }
+        foreground = loadImage("foreground.png");
     }
     
     void draw(Graphics2D g)

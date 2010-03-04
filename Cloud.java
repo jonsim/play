@@ -1,12 +1,7 @@
-import java.awt.Color;
 import java.awt.Graphics2D;
-
 import java.awt.image.BufferedImage;
-import javax.imageio.ImageIO;
-import java.io.*;
 
 import java.util.ArrayList;
-
 import java.util.Random;
 import java.util.Date;
 
@@ -27,20 +22,18 @@ class Cloud extends Item
         {
             for (int i = 0; i < 10; i++)
             {
-                try
-                {
-                    clouds.add(ImageIO.read(getClass().getResource("images/clouds/cloud" + i + ".png")));
-                }
-                catch (IOException e)
-                {
-                    System.err.println("Error reading image!");
-                }
+                clouds.add(loadImage("cloud" + i + ".png"));
             }
             
             random = new Random(date.getTime());
         }
         
         cloud = random.nextInt(clouds.size());
+    }
+    
+    BufferedImage loadImage(String s)
+    {
+        return super.loadImage("clouds/" + s);
     }
     
     void draw(Graphics2D g)

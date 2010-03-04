@@ -1,20 +1,10 @@
-import javax.swing.JComponent;
-
-import java.util.ArrayList;
-
 import java.awt.Graphics2D;
-import java.awt.Color;
-
 import java.awt.image.BufferedImage;
 import javax.imageio.ImageIO;
-import java.io.*;
+import java.io.IOException;
 
-// Key Codes: http://livedocs.adobe.com/flash/9.0/main/wwhelp/wwhimpl/common/html/wwhelp.htm?context=LiveDocs_Parts&file=00001136.html
-
-class Player extends JComponent
+class Player
 {
-    boolean fixed = false;
-    
     World world;
     
     float x, y;
@@ -42,10 +32,9 @@ class Player extends JComponent
     BufferedImage game_over;
     
     boolean dying = false;
-    
     float death_counter = 0;
     
-    Player (World world, int x, int y)
+    Player(World world, int x, int y)
     {
         this.world = world;
         this.x = x;
@@ -56,21 +45,29 @@ class Player extends JComponent
     
     void setPlayerImages(int i)
     {
+        penguin_leftup = loadImage("penguin" + i + "_leftup.png");
+        penguin_leftdown = loadImage("penguin" + i + "_leftdown.png");
+        penguin_rightup = loadImage("penguin" + i + "_rightup.png");
+        penguin_rightdown = loadImage("penguin" + i + "_rightdown.png");
+        penguin_centreup = loadImage("penguin" + i + "_centreup.png");
+        penguin_centredown = loadImage("penguin" + i + "_centredown.png");
+        
+        game_over = loadImage("game_over.png");
+    }
+    
+    BufferedImage loadImage(String s)
+    {
         try
-        {   
-            penguin_leftup = ImageIO.read(getClass().getResource("images/player/penguin" + i + "_leftup.png"));
-            penguin_leftdown = ImageIO.read(getClass().getResource("images/player/penguin" + i + "_leftdown.png"));
-            penguin_rightup = ImageIO.read(getClass().getResource("images/player/penguin" + i + "_rightup.png"));
-            penguin_rightdown = ImageIO.read(getClass().getResource("images/player/penguin" + i + "_rightdown.png"));
-            penguin_centreup = ImageIO.read(getClass().getResource("images/player/penguin" + i + "_centreup.png"));
-            penguin_centredown = ImageIO.read(getClass().getResource("images/player/penguin" + i + "_centredown.png"));
-            
-            game_over = ImageIO.read(getClass().getResource("images/game_over.png"));
+        {
+            return ImageIO.read(getClass().getResource("images/player/" + s));
         }
         catch (IOException e)
         {
-            System.err.println("Error reading images!");
+            System.err.println("Error reading image!");
+            System.exit(1);
         }
+        
+        return null;
     }
     
     void draw(Graphics2D g)
@@ -116,13 +113,15 @@ class Player extends JComponent
         }
     }
     
-    void update (double time_delta)
+    void update(double time_delta)
     {
+        // Gravity
         if (!on_ground)
         {
             y_speed += world.gravity * time_delta;
         }
         
+        // Player can't move off the screen horizontally
         if (x < 0)
         {
             x = 0;
@@ -132,24 +131,29 @@ class Player extends JComponent
             x = 500 - width;
         }
         
+        // Move left
         if (key_left  && x > 0)
         {
             x -= HPPS * time_delta;
         }
         
+        // Move right
         if (key_right && x < 500 - width)
         {
             x += HPPS * time_delta;
         }
         
+        // Jump
         if (key_up && on_ground)
         {
             y_speed = VPPS;
             on_ground = false;
         }
         
+        // Update y
         y += y_speed * time_delta;
         
+        // Determine whether player is on ground
         if (y > y_initial)
         {
             on_ground = false;
@@ -161,6 +165,7 @@ class Player extends JComponent
             on_ground = true;
         }
         
+        // Record max height
         if (y() > max_height)
         {
             max_height = y();
@@ -171,11 +176,13 @@ class Player extends JComponent
             dying = true;
         }
         
+        // If the player has hit a launcher but is now on the ground
         if (on_ground && (max_height - y_initial) > 200)
         {
             dying = true;
         }
         
+        // Wait a bit on the ground when game over
         if (dying && on_ground)
         {
             if (death_counter >= 2)

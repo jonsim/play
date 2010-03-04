@@ -10,9 +10,7 @@ class Controls implements KeyListener
         this.world2 = world2;
     }
     
-    public void keyTyped (KeyEvent e)
-    {
-    }
+    public void keyTyped (KeyEvent e) {}
     
     public void keyPressed (KeyEvent e)
     {
@@ -59,13 +57,13 @@ class Controls implements KeyListener
         // Up
         switch (e.getKeyCode())
         {
-            case 32:
+            case 87:
                 world1.player.key_up = false;
                 break;
             case 38:
                 world2.player.key_up = false;
                 break;
-            case 87:
+            case 32:
                 world1.player.key_up = false;
                 world2.player.key_up = false;
                 break;

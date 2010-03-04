@@ -1,28 +1,21 @@
 import java.awt.Graphics2D;
-
 import java.awt.image.BufferedImage;
-import javax.imageio.ImageIO;
-import java.io.*;
 
 import java.util.Date;
 import java.util.Random;
 
-class Launcher extends Item
-{        
-    static BufferedImage fish_left;
-    static BufferedImage fish_right;
+abstract class Launcher extends Item
+{
     static BufferedImage fish_dead_left;
     static BufferedImage fish_dead_right;
     
     static Random random;
+    boolean direction;
     
     float life = 1;
     boolean dying = false;
-    boolean direction;
     
-    static int score = 1;
-    
-    Launcher (World world, int x, int y, int width, int height)
+    Launcher(World world, int x, int y, int width, int height)
     {
         super(world, x, y, width, height);
         
@@ -32,48 +25,38 @@ class Launcher extends Item
             random = new Random(date.getTime());
         }
         
-        if (fish_left == null)
+        if (fish_dead_left == null)
         {
-            fish_left = load_image("images/launchers/fish_left.png");
-            fish_right = load_image("images/launchers/fish_right.png");
-            fish_dead_left = load_image("images/launchers/fish_dead_left.png");
-            fish_dead_right = load_image("images/launchers/fish_dead_right.png");
+            fish_dead_left = loadImage("fish_dead_left.png");
+            fish_dead_right = loadImage("fish_dead_right.png");
         }
         
         direction = random.nextBoolean();
     }
     
-    BufferedImage load_image(String s)
+    BufferedImage loadImage(String s)
     {
-        try
-        {
-            return ImageIO.read(getClass().getResource(s));
-        }
-        catch (IOException e)
-        {
-            System.err.println("Error reading image!");
-        }
-        
-        return null;
+        return super.loadImage("launchers/" + s);
     }
     
-    BufferedImage fish()
-    {
-        return direction ? fish_right : fish_left;
-    }
+    abstract int multiplier();
     
-    BufferedImage fish_dead()
+    abstract int score();
+    
+    abstract BufferedImage fish();
+    
+    BufferedImage fishDead()
     {
         return direction ? fish_dead_right : fish_dead_left;
     }
     
     void draw(Graphics2D g)
     {
-        BufferedImage fish = dying ? fish_dead() : fish();
+        BufferedImage fish = dying ? fishDead() : fish();
         g.drawImage(fish, x(), world.abs_y() - y(), null);
     }
     
-    void update (double time_delta)
+    void update(double time_delta)
     {
         super.update(time_delta);
         
@@ -88,19 +71,19 @@ class Launcher extends Item
         }
         else if (collision())
         {
-            launch_player();
-            world.hud.add_score(score);
+            launchPlayer();
+            world.hud.addScore(score());
             
             dying = true;
             fixed = false;
         }
     }
     
-    void launch_player()
+    void launchPlayer()
     {
-        if (world.player.VPPS > world.player.y_speed)
+        if ((world.player.VPPS * multiplier()) > world.player.y_speed)
         {
-            world.player.y_speed = world.player.VPPS; 
+            world.player.y_speed = (world.player.VPPS * multiplier()); 
         }
     }
     
