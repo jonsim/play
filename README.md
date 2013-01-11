@@ -10,11 +10,19 @@ Jonathan Simmonds and Rupert Bedford.
 
 © Copyright 2010 Jonathan Simmonds & Rupert Bedford
 
+
+Compilation Instructions
+------------------------
+
 To compile and run:
+<pre>
     javac Play.java
     java Play
+</pre>
     
 To compile, package and run:
+<pre>
     javac Play.java
     jar cfmv Play.jar Manifest.txt *.class images
     java -jar Play.jar
+</pre>
